@@ -1,4 +1,4 @@
-import { Server } from "@modelcontextprotocol/sdk/server";
+import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio";
 import { z } from "zod";
 import fetch from "node-fetch";
