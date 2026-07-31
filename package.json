@@ -5,7 +5,8 @@
   "description": "MCP tools + HTTP bridge for Goose to interact with Chaptr One backend.",
   "engines": { "node": "20.x" },
   "scripts": {
-    "start": "node src/server.js"
+    "start": "node src/server.js",
+    "test": "node --test \"test/**/*.test.mjs\""
   },
   "dependencies": {
     "cors": "^2.8.5",
