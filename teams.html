@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Team coaching — EmpowHer</title>
+<meta name="description" content="Team coaching and workshops. Team capability is invisible until it fails — Chptr One makes it visible, aggregated and safe.">
+<meta name="theme-color" content="#141414">
+<style>:root{
+  --ink:#141414;--muted:#5b5f66;--bg:#ffffff;--panel:#f6f5f2;--line:#e7e5e0;
+  --accent:#2340d6;--accent-weak:#eceffe;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --serif:Georgia,"Times New Roman",Times,serif;
+  --maxw:1060px;--pad:clamp(20px,5vw,40px);
+}
+*{box-sizing:border-box}html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+a{color:inherit}h1,h2,h3,p{margin:0}
+.wrap{max-width:var(--maxw);margin:0 auto;padding-left:var(--pad);padding-right:var(--pad)}
+.serif{font-family:var(--serif);font-weight:400;letter-spacing:-.01em}
+.eyebrow{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.muted{color:var(--muted)}
+header{position:sticky;top:0;z-index:10;background:rgba(255,255,255,.9);backdrop-filter:saturate(1.1) blur(8px);border-bottom:1px solid var(--line)}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:16px;height:64px}
+.brand{font-weight:700;letter-spacing:-.02em;font-size:19px;text-decoration:none;white-space:nowrap}
+.brand span{color:var(--accent)}
+nav.mainnav{display:flex;flex-wrap:wrap;gap:clamp(10px,2.4vw,22px);align-items:center}
+nav.mainnav a{font-size:15px;text-decoration:none;color:var(--muted);font-weight:500}
+nav.mainnav a:hover{color:var(--ink)}
+nav.mainnav a.active{color:var(--ink);font-weight:600}
+.btns{display:flex;flex-wrap:wrap;gap:14px}
+.btn{display:inline-flex;align-items:center;justify-content:center;font-weight:600;font-size:16px;text-decoration:none;border-radius:9px;padding:15px 22px;line-height:1.15;transition:transform .12s ease,background .12s ease,border-color .12s ease}
+.btn:active{transform:translateY(1px)}
+.btn-primary{background:var(--accent);color:#fff;border:1px solid var(--accent)}
+.btn-primary:hover{background:#1a33b4}
+.btn-ghost{background:#fff;color:var(--ink);border:1px solid var(--line)}
+.btn-ghost:hover{border-color:var(--ink)}
+a:focus-visible,.btn:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+section{padding:clamp(52px,8vw,96px) 0;border-top:1px solid var(--line)}
+section:first-of-type{border-top:0}
+.lead{font-size:clamp(15px,2.4vw,18px);color:var(--muted);max-width:62ch}
+.hero h1{font-size:clamp(34px,6.4vw,60px);line-height:1.05;letter-spacing:-.022em;max-width:18ch}
+.hero .sub{margin-top:22px;font-size:clamp(17px,2.4vw,21px);color:var(--ink);max-width:44ch}
+h2.big{font-size:clamp(26px,4.2vw,40px);line-height:1.1;letter-spacing:-.018em;max-width:20ch}
+.doors{display:grid;grid-template-columns:1fr;gap:16px;margin-top:38px}
+@media(min-width:760px){.doors{grid-template-columns:repeat(3,1fr)}}
+.door{display:block;text-decoration:none;border:1px solid var(--line);border-radius:14px;padding:24px;background:#fff;transition:border-color .12s ease,transform .12s ease}
+.door:hover{border-color:var(--ink);transform:translateY(-2px)}
+.door .k{font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.door .t{margin-top:10px;font-size:22px;font-weight:600;letter-spacing:-.01em}
+.door .d{margin-top:8px;color:var(--muted);font-size:15px}
+.door .go{margin-top:16px;color:var(--accent);font-weight:600;font-size:15px}
+.loop{display:grid;grid-template-columns:1fr;gap:14px;margin-top:36px;align-items:stretch}
+@media(min-width:760px){.loop{grid-template-columns:1fr auto 1fr auto 1fr;align-items:center}}
+.loop .node{border:1px solid var(--line);border-radius:14px;padding:22px;background:var(--panel)}
+.loop .node .s{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:700}
+.loop .node .h{margin-top:8px;font-size:20px;font-weight:600;letter-spacing:-.01em}
+.loop .node .p{margin-top:6px;color:var(--muted);font-size:14px}
+.loop .arrow{color:var(--muted);text-align:center;font-size:22px;line-height:1}
+.body-copy{margin-top:22px;font-size:18px;max-width:58ch}
+.body-copy p+p{margin-top:16px}
+.phone{max-width:320px;margin:0 auto;background:#0e0e10;border-radius:38px;padding:12px;box-shadow:0 24px 60px -24px rgba(20,20,20,.4),0 0 0 1px rgba(20,20,20,.06)}
+.phone-screen{background:#f4f4f6;border-radius:28px;overflow:hidden}
+.phone-top{display:flex;flex-direction:column;align-items:center;gap:3px;padding:16px 16px 12px;background:#fbfbfd;border-bottom:1px solid #e7e7ea}
+.phone-avatar{width:40px;height:40px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px}
+.phone-name{font-size:14px;font-weight:600}.phone-sub{font-size:11px;color:#9a9aa1}
+.thread{padding:16px 14px 20px;display:flex;flex-direction:column;gap:8px}
+.stamp{text-align:center;font-size:11px;color:#a0a0a7;margin:2px 0 6px}
+.bubble{background:#e7e7ec;color:#161618;border-radius:18px;border-bottom-left-radius:5px;padding:12px 14px;max-width:88%;font-size:13.5px;line-height:1.5}
+.bubble .b-title{font-weight:700;letter-spacing:-.01em}
+.bubble .b-overall{margin:8px 0 10px;padding:8px 10px;background:var(--accent-weak);border-radius:10px;font-weight:600;color:#16256e}
+.maprow{display:flex;justify-content:space-between;gap:12px;padding:3px 0;border-top:1px solid #d7d7dd}
+.maprow:first-of-type{border-top:0}.maprow .k{color:#3d3d42}.maprow .v{font-weight:600;white-space:nowrap}
+.bubble .b-foot{margin-top:10px;font-size:11.5px;color:#6c6c73}
+.split{display:grid;grid-template-columns:1fr;gap:clamp(30px,6vw,60px);align-items:center}
+@media(min-width:820px){.split{grid-template-columns:1.05fr .95fr}}
+.heat{margin-top:22px;overflow-x:auto}.heat-inner{min-width:520px}
+.heat table{border-collapse:separate;border-spacing:5px;width:100%}
+.heat caption{caption-side:top;text-align:left;font-size:13px;color:var(--muted);margin-bottom:12px}
+.heat th{font-weight:600;font-size:12.5px;color:var(--muted);text-align:center;padding:4px 2px;vertical-align:bottom}
+.heat th.rowh{text-align:left;color:var(--ink);font-size:14px;white-space:nowrap;padding-right:12px}
+.heat td{height:44px;border-radius:7px}
+.t1{background:#eceffe}.t2{background:#c3ccf5}.t3{background:#7d90ec}.t4{background:var(--accent)}
+.heat-legend{display:flex;flex-wrap:wrap;gap:16px;margin-top:16px;font-size:13px;color:var(--muted);align-items:center}
+.heat-legend .k{display:inline-flex;align-items:center;gap:7px}
+.swatch{width:15px;height:15px;border-radius:4px;display:inline-block}
+.heat-note{margin-top:12px;font-size:13px;color:var(--muted)}
+.closing{margin-top:8px;padding:28px;border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:0 14px 14px 0;background:var(--panel)}
+.closing p{font-size:clamp(18px,2.6vw,22px);font-weight:600;letter-spacing:-.01em;max-width:40ch}
+.closing a{display:inline-block;margin-top:16px;color:var(--accent);font-weight:600;text-decoration:none}
+.steps{display:grid;grid-template-columns:1fr;gap:2px;margin-top:32px;border-top:1px solid var(--line)}
+@media(min-width:760px){.steps{grid-template-columns:repeat(3,1fr);gap:0}}
+.step{padding:24px 0;border-bottom:1px solid var(--line)}
+@media(min-width:760px){.step{padding:6px 26px 6px 0;border-bottom:0}}
+.step .n{font-family:var(--serif);font-size:30px;color:var(--accent);line-height:1}
+.step p{margin-top:10px;font-size:16px;max-width:28ch}
+footer{border-top:1px solid var(--line);padding:44px 0 56px;color:var(--muted);font-size:14px}
+footer .spine{font-family:var(--serif);font-size:clamp(18px,2.6vw,22px);color:var(--ink);max-width:30ch;letter-spacing:-.01em}
+footer .legal{margin-top:22px;max-width:64ch}
+footer .legal p+p{margin-top:8px}
+.reveal{opacity:0;transform:translateY(12px);transition:opacity .55s ease,transform .55s ease}
+.reveal.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}.btn,.door{transition:none}}</style>
+</head>
+<body>
+<header><div class="wrap bar">
+  <a class="brand" href="index.html">Empow<span>Her</span></a>
+  <nav class="mainnav"><a href="coaching.html">Coaching</a><a href="teams.html" class="active">Teams</a><a href="ai-adoption.html">AI Adoption</a><a href="chptr-one.html">Chptr One</a><a href="about.html">About</a></nav>
+</div></header>
+<main>
+
+<section class="hero"><div class="wrap">
+  <span class="eyebrow reveal">Teams</span>
+  <h1 class="serif reveal" style="margin-top:14px">Team capability is invisible — until it fails.</h1>
+  <p class="sub reveal">Team coaching and workshops, grounded in a picture of where the team actually stands.</p>
+</div></section>
+
+<section><div class="wrap split">
+  <div class="reveal">
+    <h2 class="big serif">See the whole, protect the individual.</h2>
+    <p class="body-copy muted">We baseline the team with Chptr One, then coach against what the aggregate shows — the thin spots, the over-reliance, the quiet strengths. Managers see the shape of the team, never a person's score.</p>
+  </div>
+  <div class="reveal"><div class="heat reveal"><div class="heat-inner"><table>
+  <caption>Illustrative readiness heatmap — aggregated capability by team and dimension.</caption>
+  <thead><tr><th class="rowh" scope="col">Team</th><th scope="col">Foundations</th><th scope="col">Application</th><th scope="col">Evaluation</th><th scope="col">Prompting</th><th scope="col">Ethics</th><th scope="col">Reflection</th></tr></thead>
+  <tbody>
+    <tr><th class="rowh" scope="row">Product</th><td class="t4"></td><td class="t3"></td><td class="t4"></td><td class="t3"></td><td class="t2"></td><td class="t2"></td></tr>
+    <tr><th class="rowh" scope="row">Sales</th><td class="t2"></td><td class="t3"></td><td class="t2"></td><td class="t3"></td><td class="t2"></td><td class="t1"></td></tr>
+    <tr><th class="rowh" scope="row">Operations</th><td class="t3"></td><td class="t2"></td><td class="t3"></td><td class="t2"></td><td class="t3"></td><td class="t2"></td></tr>
+    <tr><th class="rowh" scope="row">Finance</th><td class="t2"></td><td class="t2"></td><td class="t3"></td><td class="t1"></td><td class="t4"></td><td class="t3"></td></tr>
+  </tbody></table></div>
+  <div class="heat-legend" aria-hidden="true"><span class="k"><span class="swatch t1"></span>Emerging</span><span class="k"><span class="swatch t2"></span>Developing</span><span class="k"><span class="swatch t3"></span>Strong</span><span class="k"><span class="swatch t4"></span>Advanced</span></div>
+  <p class="heat-note">Aggregated only. A group appears once it reaches five or more people.</p>
+</div></div>
+</div></section>
+
+<section><div class="wrap"><div class="closing reveal">
+    <p>Every engagement starts and ends with a Chptr One baseline — so progress is measured, not assumed.</p>
+    <a href="chptr-one.html">See how &rarr;</a>
+  </div></div></section>
+
+</main>
+<footer><div class="wrap">
+  <p class="spine serif">We develop human capability — and measure it, so you never have to take our word for it.</p>
+  <div class="legal">
+    <p>EmpowHer and Chptr One are products of Cordero Management ApS · CVR 44895048 · Denmark.</p>
+    <p>Built to meet EU AI Act transparency and GDPR requirements.</p>
+    <p>© 2026 Cordero Management ApS. All rights reserved.</p>
+  </div>
+</div></footer>
+<script>
+  // Single source for the org booking CTA — swap to a Calendly URL here.
+  var ORG_CTA = "mailto:raul@corderomgmt.com?subject=Chptr%20One%20readiness%20review&body=We'd%20like%20to%20book%20a%2020-minute%20AI%20readiness%20review.";
+  var SMS_CTA = "sms:+4552515605?&body=START";
+  document.querySelectorAll('[data-cta="org"]').forEach(function(a){a.setAttribute('href',ORG_CTA);});
+  document.querySelectorAll('[data-cta="sms"]').forEach(function(a){a.setAttribute('href',SMS_CTA);});
+  var els=document.querySelectorAll('.reveal');
+  if(!('IntersectionObserver'in window)){els.forEach(function(e){e.classList.add('in');});}
+  else{var io=new IntersectionObserver(function(en){en.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{rootMargin:'0px 0px -8% 0px',threshold:.06});els.forEach(function(e){io.observe(e);});}
+</script>
+</body>
+</html>

@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chptr One — How good are you with AI?</title>
+<meta name="description" content="Chptr One measures real AI literacy through phone conversations — a verified capability map for individuals and a live readiness heatmap for organisations. No app, no sign-up.">
+<meta name="theme-color" content="#141414">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Chptr One — How good are you with AI?">
+<meta property="og:description" content="Chptr One measures real AI literacy through phone conversations — a verified capability map for individuals and a live readiness heatmap for organisations. No app, no sign-up.">
+<style>
+  :root{
+    --ink:#141414;
+    --muted:#5b5f66;
+    --bg:#ffffff;
+    --panel:#f6f5f2;
+    --line:#e7e5e0;
+    --accent:#2340d6;
+    --accent-weak:#eceffe;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --serif:Georgia,"Times New Roman",Times,serif;
+    --maxw:1060px;
+    --pad:clamp(20px,5vw,40px);
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:var(--sans);font-size:17px;line-height:1.55;
+    -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  }
+  a{color:inherit}
+  h1,h2,h3,p{margin:0}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding-left:var(--pad);padding-right:var(--pad)}
+  .serif{font-family:var(--serif);font-weight:400;letter-spacing:-.01em}
+  .eyebrow{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:600}
+  .muted{color:var(--muted)}
+
+  /* header */
+  header{position:sticky;top:0;z-index:10;background:rgba(255,255,255,.86);backdrop-filter:saturate(1.1) blur(8px);border-bottom:1px solid var(--line)}
+  .bar{display:flex;align-items:center;justify-content:space-between;height:64px}
+  .brand{font-weight:700;letter-spacing:-.02em;font-size:19px}
+  .brand span{color:var(--accent)}
+  .bar a.call{font-weight:600;font-size:15px;text-decoration:none;color:var(--ink)}
+  .bar a.call:hover{color:var(--accent)}
+
+  /* buttons */
+  .btns{display:flex;flex-wrap:wrap;gap:14px}
+  .btn{display:inline-flex;align-items:center;justify-content:center;
+    font-weight:600;font-size:16px;text-decoration:none;border-radius:9px;
+    padding:15px 22px;line-height:1;transition:transform .12s ease,background .12s ease,border-color .12s ease}
+  .btn:active{transform:translateY(1px)}
+  .btn-primary{background:var(--accent);color:#fff;border:1px solid var(--accent)}
+  .btn-primary:hover{background:#1a33b4}
+  .btn-ghost{background:#fff;color:var(--ink);border:1px solid var(--line)}
+  .btn-ghost:hover{border-color:var(--ink)}
+  a:focus-visible,.btn:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+
+  /* sections */
+  section{padding:clamp(56px,9vw,104px) 0;border-top:1px solid var(--line)}
+  section:first-of-type{border-top:0}
+  .lead{font-size:clamp(15px,2.4vw,18px);color:var(--muted);max-width:60ch}
+
+  /* hero */
+  .hero{padding-top:clamp(52px,9vw,92px)}
+  .hero h1{font-size:clamp(40px,8vw,76px);line-height:1.02;letter-spacing:-.025em;max-width:15ch}
+  .hero .sub{margin-top:26px;font-size:clamp(18px,2.6vw,22px);color:var(--ink);max-width:40ch}
+  .hero .btns{margin-top:36px}
+  .hero .nosignup{margin-top:18px;font-size:14px;color:var(--muted);letter-spacing:.01em}
+
+  /* proof / phone */
+  .proof-grid{display:grid;grid-template-columns:1fr;gap:clamp(32px,6vw,64px);align-items:center}
+  @media(min-width:820px){.proof-grid{grid-template-columns:1.05fr .95fr}}
+  .proof-copy h2{font-size:clamp(26px,4vw,38px);line-height:1.1;letter-spacing:-.015em;margin-top:14px;max-width:16ch}
+  .proof-copy p{margin-top:18px}
+
+  .phone{max-width:330px;margin:0 auto;background:#0e0e10;border-radius:38px;padding:12px;
+    box-shadow:0 24px 60px -24px rgba(20,20,20,.4),0 0 0 1px rgba(20,20,20,.06)}
+  .phone-screen{background:#f4f4f6;border-radius:28px;overflow:hidden}
+  .phone-top{display:flex;flex-direction:column;align-items:center;gap:3px;padding:16px 16px 12px;background:#fbfbfd;border-bottom:1px solid #e7e7ea}
+  .phone-avatar{width:40px;height:40px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px}
+  .phone-name{font-size:14px;font-weight:600}
+  .phone-sub{font-size:11px;color:#9a9aa1}
+  .thread{padding:16px 14px 20px;display:flex;flex-direction:column;gap:8px}
+  .stamp{text-align:center;font-size:11px;color:#a0a0a7;margin:2px 0 6px}
+  .bubble{background:#e7e7ec;color:#161618;border-radius:18px;border-bottom-left-radius:5px;
+    padding:12px 14px;max-width:88%;font-size:13.5px;line-height:1.5}
+  .bubble .b-title{font-weight:700;letter-spacing:-.01em}
+  .bubble .b-overall{margin:8px 0 10px;padding:8px 10px;background:var(--accent-weak);border-radius:10px;font-weight:600;color:#16256e}
+  .maprow{display:flex;justify-content:space-between;gap:12px;padding:3px 0;border-top:1px solid #d7d7dd}
+  .maprow:first-of-type{border-top:0}
+  .maprow .k{color:#3d3d42}
+  .maprow .v{font-weight:600;white-space:nowrap}
+  .bubble .b-foot{margin-top:10px;font-size:11.5px;color:#6c6c73}
+  .bubble.small{background:var(--accent);color:#fff;align-self:flex-end;border-bottom-left-radius:18px;border-bottom-right-radius:5px;font-weight:500}
+
+  /* two-audience */
+  .aud h2{font-size:clamp(28px,4.4vw,44px);line-height:1.08;letter-spacing:-.02em;max-width:18ch}
+  .aud .body{margin-top:22px;font-size:18px;max-width:56ch}
+  .aud .body p+p{margin-top:16px}
+  .aud .btns{margin-top:30px}
+  .microline{margin-top:20px;font-size:14px;color:var(--muted)}
+
+  .privacy-callout{margin-top:30px;padding:22px 24px;background:var(--panel);border-left:3px solid var(--accent);border-radius:0 10px 10px 0}
+  .privacy-callout p{font-size:19px;font-weight:600;letter-spacing:-.01em;max-width:36ch}
+
+  /* heatmap */
+  .heat{margin-top:34px;overflow-x:auto}
+  .heat-inner{min-width:520px}
+  .heat table{border-collapse:separate;border-spacing:5px;width:100%}
+  .heat caption{caption-side:top;text-align:left;font-size:13px;color:var(--muted);margin-bottom:12px}
+  .heat th{font-weight:600;font-size:12.5px;color:var(--muted);text-align:center;padding:4px 2px;vertical-align:bottom}
+  .heat th.rowh{text-align:left;color:var(--ink);font-size:14px;white-space:nowrap;padding-right:12px}
+  .heat td{height:44px;border-radius:7px}
+  .t1{background:#eceffe}.t2{background:#c3ccf5}.t3{background:#7d90ec}.t4{background:var(--accent)}
+  .heat-legend{display:flex;flex-wrap:wrap;gap:16px;margin-top:16px;font-size:13px;color:var(--muted);align-items:center}
+  .heat-legend .k{display:inline-flex;align-items:center;gap:7px}
+  .swatch{width:15px;height:15px;border-radius:4px;display:inline-block}
+  .heat-note{margin-top:12px;font-size:13px;color:var(--muted)}
+
+  /* how it works */
+  .steps{display:grid;grid-template-columns:1fr;gap:2px;margin-top:38px;border-top:1px solid var(--line)}
+  @media(min-width:760px){.steps{grid-template-columns:repeat(3,1fr);gap:0}}
+  .step{padding:26px 0;border-bottom:1px solid var(--line)}
+  @media(min-width:760px){.step{padding:8px 28px 8px 0;border-bottom:0}}
+  .step .n{font-family:var(--serif);font-size:34px;color:var(--accent);line-height:1}
+  .step p{margin-top:12px;font-size:17px;max-width:26ch}
+
+  /* seven levels */
+  .scale{margin-top:36px;display:flex;flex-wrap:wrap;gap:10px;align-items:stretch}
+  .lvl{flex:1 1 120px;min-width:118px;border:1px solid var(--line);border-radius:10px;padding:16px 14px;background:#fff}
+  .lvl .ln{font-size:12px;color:var(--muted);font-weight:600;letter-spacing:.08em}
+  .lvl .lt{margin-top:8px;font-size:17px;font-weight:600;letter-spacing:-.01em}
+  .lvl:last-child{border-color:var(--accent);background:var(--accent-weak)}
+  .scale-note{margin-top:20px;font-size:15px;color:var(--muted);max-width:60ch}
+
+  /* privacy list */
+  .plist{margin-top:34px;display:grid;grid-template-columns:1fr;gap:0}
+  @media(min-width:720px){.plist{grid-template-columns:1fr 1fr}}
+  .pitem{padding:22px 0;border-top:1px solid var(--line)}
+  @media(min-width:720px){.pitem{padding:22px 28px 22px 0}}
+  .pitem h3{font-size:17px;letter-spacing:-.01em}
+  .pitem p{margin-top:8px;font-size:15px;color:var(--muted);max-width:40ch}
+  .compliance-line{margin-top:36px;font-size:15px;color:var(--ink);font-weight:600}
+
+  /* footer */
+  footer{border-top:1px solid var(--line);padding:44px 0 56px;color:var(--muted);font-size:14px}
+  footer .flegal p{max-width:64ch}
+  footer .fbrand{font-weight:700;color:var(--ink);letter-spacing:-.02em;font-size:17px;margin-bottom:14px}
+  footer .fbrand span{color:var(--accent)}
+  footer a{color:var(--muted)}
+
+  /* motion */
+  .reveal{opacity:0;transform:translateY(14px);transition:opacity .6s ease,transform .6s ease}
+  .reveal.in{opacity:1;transform:none}
+  @media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}.btn{transition:none}}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap bar">
+    <div class="brand">Chptr<span>·</span>One</div>
+    <a class="call" href="#" data-cta="sms">Text START</a>
+  </div>
+</header>
+
+<main>
+  <!-- 1. HERO -->
+  <section class="hero">
+    <div class="wrap">
+      <h1 class="serif reveal">How good are you with AI?</h1>
+      <p class="sub reveal">Not what you'd say in a meeting — what you could prove. One call finds out.</p>
+      <div class="btns reveal">
+        <a class="btn btn-primary" href="#" data-cta="sms">Text START to +45 52 51 56 05 — your coach calls you back.</a>
+        <a class="btn btn-ghost" href="#" data-cta="org">Book a 20-minute readiness review</a>
+      </div>
+      <p class="nosignup reveal">No app. No sign-up.</p>
+    </div>
+  </section>
+
+  <!-- 2. PROOF STRIP -->
+  <section>
+    <div class="wrap proof-grid">
+      <div class="proof-copy reveal">
+        <span class="eyebrow">The receipt</span>
+        <h2 class="serif">Every call ends with a map.</h2>
+        <p class="muted">A short conversation becomes a plain-language capability map, sent straight to your phone. No dashboard to log into. No score to game. Just where you actually stand.</p>
+      </div>
+      <div class="reveal">
+        <div class="phone" role="img" aria-label="Mock text message showing a Chptr One Learning Map with an overall level and six dimensions, each with a value.">
+          <div class="phone-screen">
+            <div class="phone-top">
+              <div class="phone-avatar" aria-hidden="true">C1</div>
+              <div class="phone-name">Chptr One</div>
+              <div class="phone-sub">Text message</div>
+            </div>
+            <div class="thread">
+              <div class="stamp">Today 09:41</div>
+              <div class="bubble">
+                <div class="b-title">Your Learning Map</div>
+                <div class="b-overall">Overall: Analyse — level 5 of 7</div>
+                <div class="maprow"><span class="k">Foundations</span><span class="v">Strong</span></div>
+                <div class="maprow"><span class="k">Practical application</span><span class="v">Developing</span></div>
+                <div class="maprow"><span class="k">Critical evaluation</span><span class="v">Strong</span></div>
+                <div class="maprow"><span class="k">Prompting &amp; tooling</span><span class="v">Developing</span></div>
+                <div class="maprow"><span class="k">Ethics &amp; compliance</span><span class="v">Strong</span></div>
+                <div class="maprow"><span class="k">Reflection &amp; follow-through</span><span class="v">Emerging</span></div>
+                <div class="b-foot">Reply MAP for detail · Reply DELETE to erase.</div>
+              </div>
+              <div class="bubble small">MAP</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. FOR YOURSELF -->
+  <section class="aud">
+    <div class="wrap">
+      <span class="eyebrow reveal">For yourself</span>
+      <h2 class="serif reveal">Ask the questions you don't ask in meetings.</h2>
+      <div class="body reveal">
+        <p>A few minutes on the phone. No screens, no test, no audience — a safe space where not knowing is the point, not the problem.</p>
+        <p>You'll get an honest map of where you stand with AI and where to go next. Not a grade. A direction. After every call.</p>
+      </div>
+      <div class="btns reveal">
+        <a class="btn btn-primary" href="#" data-cta="sms">Text START to +45 52 51 56 05 — your coach calls you back.</a>
+      </div>
+      <p class="microline reveal">Your data is yours. Text DELETE at any time to erase it.</p>
+    </div>
+  </section>
+
+  <!-- 4. FOR YOUR ORGANISATION -->
+  <section class="aud">
+    <div class="wrap">
+      <span class="eyebrow reveal">For your organisation</span>
+      <h2 class="serif reveal">Prove your workforce is ready.</h2>
+      <div class="body reveal">
+        <p>Regulators, boards and customers increasingly ask what your people can actually do with AI. A completion certificate is not an answer.</p>
+        <p>Chptr One is the evidence layer — a live readiness map built from real conversations. Not a training course. Not a checkbox. Defensible measurement you can put in front of compliance, the board and the CFO.</p>
+      </div>
+
+      <div class="privacy-callout reveal">
+        <p>Managers see the whole — never the individual. Enforced by architecture, not permissions.</p>
+      </div>
+
+      <div class="heat reveal">
+        <div class="heat-inner">
+          <table>
+            <caption>Illustrative readiness heatmap — aggregated capability by team and dimension.</caption>
+            <thead>
+              <tr>
+                <th class="rowh" scope="col">Team</th>
+                <th scope="col">Foundations</th>
+                <th scope="col">Application</th>
+                <th scope="col">Evaluation</th>
+                <th scope="col">Prompting</th>
+                <th scope="col">Ethics</th>
+                <th scope="col">Reflection</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><th class="rowh" scope="row">Product</th>
+                <td class="t4"></td><td class="t3"></td><td class="t4"></td><td class="t3"></td><td class="t2"></td><td class="t2"></td></tr>
+              <tr><th class="rowh" scope="row">Sales</th>
+                <td class="t2"></td><td class="t3"></td><td class="t2"></td><td class="t3"></td><td class="t2"></td><td class="t1"></td></tr>
+              <tr><th class="rowh" scope="row">Operations</th>
+                <td class="t3"></td><td class="t2"></td><td class="t3"></td><td class="t2"></td><td class="t3"></td><td class="t2"></td></tr>
+              <tr><th class="rowh" scope="row">Finance</th>
+                <td class="t2"></td><td class="t2"></td><td class="t3"></td><td class="t1"></td><td class="t4"></td><td class="t3"></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="heat-legend" aria-hidden="true">
+          <span class="k"><span class="swatch t1"></span>Emerging</span>
+          <span class="k"><span class="swatch t2"></span>Developing</span>
+          <span class="k"><span class="swatch t3"></span>Strong</span>
+          <span class="k"><span class="swatch t4"></span>Advanced</span>
+        </div>
+        <p class="heat-note">Aggregated only. A group appears once it reaches five or more people.</p>
+      </div>
+
+      <div class="btns reveal" style="margin-top:34px">
+        <a class="btn btn-primary" href="#" data-cta="org">Book a 20-minute readiness review</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. HOW IT WORKS -->
+  <section>
+    <div class="wrap">
+      <span class="eyebrow reveal">How it works</span>
+      <div class="steps reveal">
+        <div class="step"><div class="n serif">1</div><p>Call the number and talk for a few minutes.</p></div>
+        <div class="step"><div class="n serif">2</div><p>The conversation maps your capability across seven levels.</p></div>
+        <div class="step"><div class="n serif">3</div><p>Your Learning Map arrives by SMS — yours to keep or delete.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. SEVEN LEVELS -->
+  <section>
+    <div class="wrap">
+      <span class="eyebrow reveal">The scale</span>
+      <h2 class="serif reveal" style="font-size:clamp(24px,3.6vw,34px);letter-spacing:-.015em;margin-top:14px;max-width:22ch">Seven levels, from first awareness to creating with AI.</h2>
+      <div class="scale reveal">
+        <div class="lvl"><div class="ln">01</div><div class="lt">Aware</div></div>
+        <div class="lvl"><div class="ln">02</div><div class="lt">Remember</div></div>
+        <div class="lvl"><div class="ln">03</div><div class="lt">Understand</div></div>
+        <div class="lvl"><div class="ln">04</div><div class="lt">Apply</div></div>
+        <div class="lvl"><div class="ln">05</div><div class="lt">Analyse</div></div>
+        <div class="lvl"><div class="ln">06</div><div class="lt">Evaluate</div></div>
+        <div class="lvl"><div class="ln">07</div><div class="lt">Create</div></div>
+      </div>
+      <p class="scale-note reveal">Grounded in Bloom's taxonomy. Everyone lands somewhere on the scale — the map shows exactly where, and what the next level asks of you.</p>
+    </div>
+  </section>
+
+  <!-- 7. PRIVACY & COMPLIANCE -->
+  <section>
+    <div class="wrap">
+      <span class="eyebrow reveal">Privacy &amp; compliance</span>
+      <div class="plist reveal">
+        <div class="pitem"><h3>No drill-down</h3><p>Individual results are never visible to managers. The architecture does not expose them.</p></div>
+        <div class="pitem"><h3>Group threshold</h3><p>Aggregated views appear only once a group reaches five or more people.</p></div>
+        <div class="pitem"><h3>Delete by SMS</h3><p>Text DELETE at any time and your data is erased.</p></div>
+        <div class="pitem"><h3>Consent up front</h3><p>Every call opens by telling you it is recorded and why, before anything is stored.</p></div>
+      </div>
+      <p class="compliance-line reveal">Built to meet EU AI Act transparency and GDPR requirements.</p>
+    </div>
+  </section>
+
+  <!-- Part of something bigger -->
+  <section class="aud">
+    <div class="wrap">
+      <span class="eyebrow reveal">Part of something bigger</span>
+      <h2 class="serif reveal">Measurement is one half of the loop.</h2>
+      <div class="body reveal">
+        <p>Chptr One tells you where you stand. EmpowHer coaching is what you do about the gaps it finds — for a person or a whole workforce.</p>
+      </div>
+      <div class="btns reveal">
+        <a class="btn btn-primary" href="coaching.html">EmpowHer coaching</a>
+        <a class="btn btn-ghost" href="ai-adoption.html">AI adoption for organisations</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- 8. FOOTER -->
+<footer>
+  <div class="wrap flegal">
+    <div class="fbrand">Chptr<span>·</span>One</div>
+    <p>Chptr One is a product of Cordero Management ApS · CVR 44895048 · Denmark.</p>
+    <p style="margin-top:8px">Built to meet EU AI Act transparency and GDPR requirements.</p>
+    <p style="margin-top:14px">© 2026 Cordero Management ApS. All rights reserved.</p>
+  </div>
+</footer>
+
+<script>
+  // ---- CTA configuration ------------------------------------------------
+  // Swap ORG_CTA to a Calendly URL when ready — this one line is the only
+  // place the organisation booking destination is defined.
+  var ORG_CTA = "mailto:raul@corderomgmt.com?subject=Chptr%20One%20readiness%20review&body=We'd%20like%20to%20book%20a%2020-minute%20AI%20readiness%20review.";
+  var PHONE   = "+4552515605";
+  // Individual CTA is SMS-only (prefilled "START"). No tel: link anywhere on the page.
+  var SMS_CTA = "sms:" + PHONE + "?&body=START";
+
+  document.querySelectorAll('[data-cta="org"]').forEach(function(a){ a.setAttribute('href', ORG_CTA); });
+  document.querySelectorAll('[data-cta="sms"]').forEach(function(a){ a.setAttribute('href', SMS_CTA); });
+
+  // ---- Reveal on scroll (respects reduced-motion via CSS) ---------------
+  var els = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) {
+    els.forEach(function(el){ el.classList.add('in'); });
+  } else {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, {rootMargin:'0px 0px -8% 0px', threshold:0.06});
+    els.forEach(function(el){ io.observe(el); });
+  }
+</script>
+</body>
+</html>
