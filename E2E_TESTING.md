@@ -10,7 +10,7 @@ This repo (`chaptrone-mcp-server`) is the integration layer between **Goose**
 | File | Role | Runnable? |
 | --- | --- | --- |
 | `src/server.js` | Express **HTTP bridge** — health check + MCP manifest for Goose to load as an HTTP extension. This is what `npm start` runs. | ✅ Yes |
-| `src/server.ts` | An **MCP (stdio) server** exposing `log_signal`, `get_employee_dashboard`, `say`, `verify_user`. | ❌ No — see findings |
+| `src/server.ts` | An **MCP (stdio) server** exposing `log_signal`, `get_employee_dashboard`, `say`, `verify_user`. | ✅ Yes — `npm run build` → `npm run start:mcp` (see finding 2) |
 
 "End-to-end" here means booting the real server process and driving it over
 real HTTP, exactly as a Goose client or a Render health check would.
@@ -57,17 +57,31 @@ upstream backend endpoints (`/api/get-voices`, `/api/get-session`,
 `/stream-voice`) live. Those need to be run from an environment allowed to reach
 the Render host.
 
-### 2. `src/server.ts` cannot run as written
-- Its dependencies — `@modelcontextprotocol/sdk`, `zod`, `node-fetch` — are
-  **not declared in `package.json`** and are not installed.
-- The MCP API usage is inconsistent with the SDK: it calls `.tool()` on the
-  low-level `Server` class and reads handler args as `{ input }`, which is not
-  the current SDK's tool-registration shape. It has no build step wired up
-  either (`tsconfig.json` emits to `dist/`, but nothing compiles it).
-- Net effect: the four MCP tools (`log_signal`, `get_employee_dashboard`,
-  `say`, `verify_user`) are **not currently executable**. Making them testable
-  requires declaring the deps, fixing the registration API, and adding a build.
-  This was left as a documented finding rather than silently rewritten.
+### 2. `src/server.ts` — was un-runnable, now FIXED
+Originally the MCP server could not start: its deps (`@modelcontextprotocol/sdk`,
+`zod`, `node-fetch`) were undeclared and uninstalled; it called `.tool()` on the
+low-level `Server` class with a `{ input }` handler shape that the SDK does not
+use; it returned invalid `type: "json"` content blocks; and no build step
+compiled the TypeScript. Repaired on this branch:
+
+- **Deps declared + installed** — `@modelcontextprotocol/sdk@^1.30`, `zod@^3`
+  as runtime deps; `typescript` + `@types/node` as dev deps. `node-fetch` was
+  **dropped** in favour of Node 20's global `fetch`.
+- **Correct SDK API** — migrated to the high-level `McpServer` + `registerTool`,
+  with raw-shape `inputSchema`s and handlers that receive parsed args directly.
+- **Valid MCP content** — the invalid `type: "json"` blocks are gone; tools
+  return `type: "text"` (with `structuredContent` where a JSON payload helps).
+- **Build wired** — `tsconfig` now emits CommonJS (`module: Node16`) so the
+  compiled server coexists with the CommonJS Express bridge without flipping the
+  package to ESM. `npm run build` → `dist/server.js`; `npm run start:mcp` runs it.
+- **Proven** — `test/mcp.server.test.mjs` compiles the server, spawns it, and
+  drives a real JSON-RPC handshake over stdio: `initialize` returns `serverInfo`,
+  `tools/list` returns all four tools, `tools/call say` returns a valid text
+  content block, and over-long input is rejected by the zod schema. **All pass.**
+
+The four tools still proxy to the Render backend, which remains unreachable from
+this environment (finding 1), so their network paths are exercised by a live run,
+not by CI.
 
 ### 3. CI was broken (now fixed)
 `.github/workflows/ci.yml` ran `npm ci` (no lockfile was committed) and
@@ -82,12 +96,16 @@ Fixed in this branch: committed `package-lock.json`, and the workflow now runs
 - Added a `test` script to `package.json`.
 - Committed `package-lock.json` so `npm ci` is reproducible.
 - Rewrote the CI workflow to install and run the E2E suite.
+- **Repaired the MCP stdio server** (`src/server.ts`) — see finding 2 — added
+  its deps + a `build` step, migrated to `McpServer`/`registerTool`, fixed the
+  content blocks, and added `test/mcp.server.test.mjs`. **13/13 tests pass.**
+- Reconciled `README.md` and `package.json` scripts with the two-server reality
+  (`start` = HTTP bridge, `build` + `start:mcp` = MCP stdio server).
 
 ## Recommended follow-ups
 
-1. Add the MCP SDK deps + a build step and repair `src/server.ts` so the four
-   MCP tools run; then add tool-level E2E tests against a local mock backend.
-2. Add a smoke test that runs against the live Render backend from an
-   environment/CI job that is allowed to reach it.
-3. Reconcile `README.md` (`npm run dev` / `npm run build`) with the actual
-   scripts in `package.json`.
+1. Add a smoke test that runs against the live Render backend from an
+   environment/CI job that is allowed to reach it (exercises the tool network
+   paths that finding 1 blocks here).
+2. Consider a local mock backend so `log_signal` / `get_employee_dashboard` /
+   `verify_user` can be asserted end-to-end without the live Render host.
