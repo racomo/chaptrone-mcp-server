@@ -74,14 +74,23 @@ compiled the TypeScript. Repaired on this branch:
 - **Build wired** — `tsconfig` now emits CommonJS (`module: Node16`) so the
   compiled server coexists with the CommonJS Express bridge without flipping the
   package to ESM. `npm run build` → `dist/server.js`; `npm run start:mcp` runs it.
-- **Proven** — `test/mcp.server.test.mjs` compiles the server, spawns it, and
-  drives a real JSON-RPC handshake over stdio: `initialize` returns `serverInfo`,
-  `tools/list` returns all four tools, `tools/call say` returns a valid text
-  content block, and over-long input is rejected by the zod schema. **All pass.**
+- **Proven at the protocol level** — `test/mcp.server.test.mjs` compiles the
+  server, spawns it, and drives a real JSON-RPC handshake over stdio:
+  `initialize` returns `serverInfo`, `tools/list` returns all four tools,
+  `tools/call say` returns a valid text content block, and over-long input is
+  rejected by the zod schema.
+- **Proven at the tool level against a mock backend** —
+  `test/mcp.tools.integration.test.mjs` stands up a local HTTP mock of the
+  Chaptr One backend and points the server at it via `CHAPTR_ONE_BASE`, so the
+  three network-backed tools exercise their real HTTP paths: `log_signal` POSTs
+  to `/api/behavior/log` (and forwards the `x-mcp-key` shared secret) and
+  returns `ok`; `get_employee_dashboard` GETs and returns the summary JSON;
+  `verify_user` (mock mode) scores from the dashboard's CGI with the default
+  rubric. **Full suite 16/16.**
 
-The four tools still proxy to the Render backend, which remains unreachable from
-this environment (finding 1), so their network paths are exercised by a live run,
-not by CI.
+The `say` and mock-backed paths are fully covered in CI. The one path CI cannot
+run is the tools hitting the *live* Render host, which remains unreachable from
+this environment (finding 1) — that needs a live run.
 
 ### 3. CI was broken (now fixed)
 `.github/workflows/ci.yml` ran `npm ci` (no lockfile was committed) and
@@ -97,15 +106,16 @@ Fixed in this branch: committed `package-lock.json`, and the workflow now runs
 - Committed `package-lock.json` so `npm ci` is reproducible.
 - Rewrote the CI workflow to install and run the E2E suite.
 - **Repaired the MCP stdio server** (`src/server.ts`) — see finding 2 — added
-  its deps + a `build` step, migrated to `McpServer`/`registerTool`, fixed the
-  content blocks, and added `test/mcp.server.test.mjs`. **13/13 tests pass.**
+  its deps + a `build` step, migrated to `McpServer`/`registerTool`, and fixed
+  the content blocks. Added `test/mcp.server.test.mjs` (protocol) and
+  `test/mcp.tools.integration.test.mjs` (tools vs. a local mock backend), sharing
+  `test/mcp-harness.mjs`. `pretest` builds before the suite runs. **16/16 pass.**
 - Reconciled `README.md` and `package.json` scripts with the two-server reality
   (`start` = HTTP bridge, `build` + `start:mcp` = MCP stdio server).
 
 ## Recommended follow-ups
 
-1. Add a smoke test that runs against the live Render backend from an
-   environment/CI job that is allowed to reach it (exercises the tool network
-   paths that finding 1 blocks here).
-2. Consider a local mock backend so `log_signal` / `get_employee_dashboard` /
-   `verify_user` can be asserted end-to-end without the live Render host.
+1. Add a smoke test that runs against the **live** Render backend from an
+   environment/CI job that is allowed to reach it — the only tool path not
+   already covered (finding 1 blocks it here; the mock-backend tests cover the
+   rest).

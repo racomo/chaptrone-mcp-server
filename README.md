@@ -43,7 +43,12 @@ MCP command in Goose. Environment variables (`CHAPTR_ONE_BASE`, `CHAPTRONE_MCP_K
 `npm test` runs the Node built-in test runner over `test/*.test.mjs`:
 
 - `bridge.e2e.test.mjs` — boots the HTTP bridge and asserts its manifest + endpoints.
-- `mcp.server.test.mjs` — compiles the MCP server, spawns it, and drives a real
-  JSON-RPC handshake over stdio (initialize / tools/list / tools/call).
+- `mcp.server.test.mjs` — spawns the MCP server and drives a real JSON-RPC
+  handshake over stdio (initialize / tools/list / tools/call).
+- `mcp.tools.integration.test.mjs` — points the MCP server at a local mock of the
+  Chaptr One backend (via `CHAPTR_ONE_BASE`) and asserts `log_signal`,
+  `get_employee_dashboard`, and `verify_user` end-to-end.
+
+`pretest` compiles the MCP server (`tsc`) so the suite always runs against fresh output.
 
 See [`E2E_TESTING.md`](./E2E_TESTING.md) for the full report.
